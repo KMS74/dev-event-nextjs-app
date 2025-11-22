@@ -38,6 +38,7 @@ const EventSchema = new Schema<IEvent>(
     },
     slug: {
       type: String,
+      required: [true, "Slug is required"],
       unique: true,
       lowercase: true,
       trim: true,
