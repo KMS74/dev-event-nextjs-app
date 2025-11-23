@@ -18,7 +18,6 @@ if (!MONGODB_URI) {
  * This prevents TypeScript errors when accessing global.mongoose
  */
 declare global {
-  // eslint-disable-next-line no-var
   var mongoose: {
     conn: mongoose.Connection | null;
     promise: Promise<mongoose.Connection> | null;
