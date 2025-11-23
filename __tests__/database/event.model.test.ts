@@ -25,3 +25,4 @@ describe('Event Model', () => {
     expect(modePath.options.enum.values).toEqual(['online', 'offline', 'hybrid']);
   });
 });
+$ r .sed-tmp2
