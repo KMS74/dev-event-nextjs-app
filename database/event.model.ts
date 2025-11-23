@@ -43,7 +43,6 @@ const EventSchema = new Schema<IEvent>(
     },
     slug: {
       type: String,
-      required: [true, "Slug is required"],
       unique: true,
       lowercase: true,
       trim: true,
@@ -51,18 +50,18 @@ const EventSchema = new Schema<IEvent>(
     description: {
       type: String,
       required: [true, "Description is required"],
-      maxLength: [1000, "Description must be at most 1000 characters"],
       trim: true,
+      maxLength: [1000, "Description cannot exceed 1000 characters"],
     },
     overview: {
       type: String,
       required: [true, "Overview is required"],
-      maxLength: [500, "Overview must be at most 500 characters"],
       trim: true,
+      maxLength: [500, "Overview cannot exceed 500 characters"],
     },
     image: {
       type: String,
-      required: [true, "Image is required"],
+      required: [true, "Image URL is required"],
       trim: true,
     },
     venue: {
@@ -78,22 +77,18 @@ const EventSchema = new Schema<IEvent>(
     date: {
       type: String,
       required: [true, "Date is required"],
-      trim: true,
     },
     time: {
       type: String,
       required: [true, "Time is required"],
-      trim: true,
     },
     mode: {
       type: String,
       required: [true, "Mode is required"],
       enum: {
         values: ["online", "offline", "hybrid"],
-        message: "Mode must be online, offline, or hybrid",
+        message: "Mode must be either online, offline, or hybrid",
       },
-      lowercase: true,
-      trim: true,
     },
     audience: {
       type: String,
@@ -104,8 +99,8 @@ const EventSchema = new Schema<IEvent>(
       type: [String],
       required: [true, "Agenda is required"],
       validate: {
-        validator: (v: string[]) => Array.isArray(v) && v.length > 0,
-        message: "Agenda must contain at least one item",
+        validator: (v: string[]) => v.length > 0,
+        message: "At least one agenda item is required",
       },
     },
     organizer: {
@@ -117,8 +112,8 @@ const EventSchema = new Schema<IEvent>(
       type: [String],
       required: [true, "Tags are required"],
       validate: {
-        validator: (v: string[]) => Array.isArray(v) && v.length > 0,
-        message: "Tags must contain at least one item",
+        validator: (v: string[]) => v.length > 0,
+        message: "At least one tag is required",
       },
     },
   },
@@ -152,9 +147,6 @@ EventSchema.pre("save", async function () {
     this.time = normalizeTime(this.time);
   }
 });
-
-// Create unique index on slug for faster queries and uniqueness enforcement
-EventSchema.index({ slug: 1 }, { unique: true });
 
 /**
  * Export Event model
