@@ -18,7 +18,7 @@ if (!MONGODB_URI) {
  * This prevents TypeScript errors when accessing global.mongoose
  */
 declare global {
-  var mongoose: {
+  var mongooseCache: {
     conn: mongoose.Connection | null;
     promise: Promise<mongoose.Connection> | null;
   };
@@ -29,10 +29,10 @@ declare global {
  * In development, Next.js hot reloading can cause multiple connections
  * This cache ensures we reuse the existing connection instead of creating new ones
  */
-let cached = global.mongoose;
+let mongooseCache = global.mongooseCache;
 
-if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null };
+if (!mongooseCache) {
+  mongooseCache = global.mongooseCache = { conn: null, promise: null };
 }
 
 /**
@@ -49,18 +49,18 @@ if (!cached) {
  */
 async function connectToDatabase(): Promise<mongoose.Connection> {
   // Return cached connection if it exists
-  if (cached.conn) {
-    return cached.conn;
+  if (mongooseCache.conn) {
+    return mongooseCache.conn;
   }
 
   // If no cached promise exists, create a new connection
-  if (!cached.promise) {
+  if (!mongooseCache.promise) {
     const opts: mongoose.ConnectOptions = {
       bufferCommands: false, // Disable mongoose buffering for better error handling
     };
 
     // Create connection promise and cache it
-    cached.promise = mongoose
+    mongooseCache.promise = mongoose
       .connect(MONGODB_URI as string, opts)
       .then((mongooseInstance) => {
         return mongooseInstance.connection;
@@ -69,14 +69,14 @@ async function connectToDatabase(): Promise<mongoose.Connection> {
 
   try {
     // Wait for the connection promise to resolve
-    cached.conn = await cached.promise;
+    mongooseCache.conn = await mongooseCache.promise;
   } catch (error) {
     // Clear the cached promise on error to allow retry
-    cached.promise = null;
+    mongooseCache.promise = null;
     throw error;
   }
 
-  return cached.conn;
+  return mongooseCache.conn;
 }
 
 export default connectToDatabase;
