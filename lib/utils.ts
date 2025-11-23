@@ -1,19 +1,24 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
+/**
+ * Combine multiple class values into a single, merged class string.
+ *
+ * Accepts common class-value formats (strings, arrays, objects) and returns a
+ * single space-separated class string with Tailwind utility conflicts resolved.
+ *
+ * @param inputs - Class values to merge (strings, arrays, objects, etc.)
+ * @returns The resulting merged class string
+ */
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
 /**
- * Generates a unique URL-friendly slug from a given string
- * Appends a random 6-character alphanumeric string to ensure uniqueness
- * @param text - The text to convert to a slug
- * @returns A unique URL-friendly slug string
+ * Creates a URL-friendly slug from the given text and appends an 8-character unique hex suffix.
  *
- * @example
- * generateSlug("Hello World!") // returns "hello-world-a1b2c3"
- * generateSlug("React & Next.js Conference 2024") // returns "react-nextjs-conference-2024-x9y8z7"
+ * @param text - Source text to convert into the slug; if empty, returns an empty string.
+ * @returns The generated slug (lowercased, containing only alphanumeric characters and hyphens) followed by a hyphen and an 8-character unique hex suffix.
  */
 export function generateSlug(text: string): string {
   if (!text) return "";
