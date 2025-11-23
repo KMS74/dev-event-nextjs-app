@@ -6,22 +6,32 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /**
- * Generates a URL-friendly slug from a given string
+ * Generates a unique URL-friendly slug from a given string
+ * Appends a random 6-character alphanumeric string to ensure uniqueness
  * @param text - The text to convert to a slug
- * @returns A URL-friendly slug string
+ * @returns A unique URL-friendly slug string
  *
  * @example
- * generateSlug("Hello World!") // returns "hello-world"
- * generateSlug("React & Next.js Conference 2024") // returns "react-nextjs-conference-2024"
+ * generateSlug("Hello World!") // returns "hello-world-a1b2c3"
+ * generateSlug("React & Next.js Conference 2024") // returns "react-nextjs-conference-2024-x9y8z7"
  */
 export function generateSlug(text: string): string {
-  return text
+  if (!text) return "";
+  const baseSlug = text
     .toLowerCase()
     .trim()
     .replace(/[^\w\s-]/g, "") // Remove special characters
     .replace(/\s+/g, "-") // Replace spaces with hyphens
     .replace(/-+/g, "-") // Replace multiple hyphens with single hyphen
     .replace(/^-+|-+$/g, ""); // Remove leading/trailing hyphens
+
+  // Generate a unique identifier using crypto for better randomness
+  // Take first 8 characters of UUID (without hyphens) for a compact unique suffix
+  const uniqueId = crypto.randomUUID().replace(/-/g, "").substring(0, 8);
+
+  const uniqueGeneratedSlug = `${baseSlug}-${uniqueId}`;
+
+  return uniqueGeneratedSlug;
 }
 
 /**
