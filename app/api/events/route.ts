@@ -37,6 +37,29 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Validate file type
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+    if (!allowedTypes.includes(file.type)) {
+      return NextResponse.json(
+        {
+          message:
+            "Invalid file type. Only JPEG, PNG, WebP, and GIF images are allowed",
+        },
+        { status: 400 }
+      );
+    }
+
+    // Validate file size (e.g., 5MB limit)
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSize) {
+      return NextResponse.json(
+        {
+          message: "File size exceeds 5MB limit",
+        },
+        { status: 400 }
+      );
+    }
+
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
@@ -47,6 +70,7 @@ export async function POST(request: NextRequest) {
             {
               resource_type: "image",
               folder: "dev-event",
+              transformation: [{ width: 2000, height: 2000, crop: "limit" }],
             },
             (error, result) => {
               if (error) {
@@ -60,7 +84,16 @@ export async function POST(request: NextRequest) {
       }
     );
 
-    event.image = uploadResult?.secure_url || "";
+    if (!uploadResult?.secure_url) {
+      return NextResponse.json(
+        {
+          message: "Image upload failed",
+        },
+        { status: 500 }
+      );
+    }
+
+    event.image = uploadResult.secure_url;
 
     const createdEvent = await Event.create(event);
     return NextResponse.json(

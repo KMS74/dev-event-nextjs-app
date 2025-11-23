@@ -15,7 +15,10 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /**
- * Creates a URL-friendly slug from the given text and appends an 8-character unique hex suffix.
+ * Generates a unique URL-friendly slug from a given string
+ * Appends a random 8-character hexadecimal string to ensure uniqueness
+ * @param text - The text to convert to a slug
+ * @returns A unique URL-friendly slug string
  *
  * @param text - Source text to convert into the slug; if empty, returns an empty string.
  * @returns The generated slug (lowercased, containing only alphanumeric characters and hyphens) followed by a hyphen and an 8-character unique hex suffix.
