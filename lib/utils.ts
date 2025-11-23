@@ -29,7 +29,8 @@ export function generateSlug(text: string): string {
   // Take first 8 characters of UUID (without hyphens) for a compact unique suffix
   const uniqueId = crypto.randomUUID().replace(/-/g, "").substring(0, 8);
 
-  const uniqueGeneratedSlug = `${baseSlug}-${uniqueId}`;
+  // If baseSlug is empty, return only the unique ID to avoid leading hyphen
+  const uniqueGeneratedSlug = baseSlug ? `${baseSlug}-${uniqueId}` : uniqueId;
 
   return uniqueGeneratedSlug;
 }
