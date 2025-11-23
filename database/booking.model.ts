@@ -61,8 +61,18 @@ BookingSchema.pre("save", async function () {
 // Create index on eventId for optimized query performance
 BookingSchema.index({ eventId: 1 });
 
-// Optional: Compound index for finding bookings by event and email
-BookingSchema.index({ eventId: 1, email: 1 });
+// Create index on eventId and createdAt for optimized query performance
+BookingSchema.index({ eventId: 1, createdAt: -1 });
+
+// Create index on email for optimized query performance
+BookingSchema.index({ email: 1 });
+
+// Create unique index on eventId and email for optimized query performance
+// Enforce unique booking per event and email
+BookingSchema.index(
+  { eventId: 1, email: 1 },
+  { unique: true, name: "event_email_index" }
+);
 
 /**
  * Export Booking model
