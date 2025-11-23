@@ -43,31 +43,49 @@ export function formatToISODate(dateString: string): string {
 }
 
 /**
- * Validates time format (HH:MM in 24-hour format)
+ * Validates time format (HH:MM 24-hour or h:MM AM/PM 12-hour)
  * @param time - The time string to validate
  * @returns True if valid, false otherwise
  *
  * @example
  * isValidTime("09:00") // returns true
+ * isValidTime("9:00 AM") // returns true
  * isValidTime("25:00") // returns false
  */
 export function isValidTime(time: string): boolean {
-  const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
-  return timeRegex.test(time);
+  const time24 = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
+  const time12 = /^(1[0-2]|0?[1-9]):[0-5][0-9]\s?(AM|PM|am|pm)$/;
+  return time24.test(time) || time12.test(time);
 }
 
 /**
- * Normalizes a time string to 12-hour format with AM/PM
- * @param time - The time string to normalize
+ * Normalizes a time string to canonical 12-hour format (h:MM AM/PM)
+ * @param time - The time string to normalize (assumes valid input)
  * @returns Normalized time string in 12-hour format
  *
  * @example
  * normalizeTime("09:00") // returns "9:00 AM"
  * normalizeTime("13:30") // returns "1:30 PM"
+ * normalizeTime("9:00am") // returns "9:00 AM"
  */
 export function normalizeTime(time: string): string {
-  const [hours, minutes] = time.split(":");
-  const amPm = parseInt(hours) >= 12 ? "PM" : "AM";
-  const normalizedHours = parseInt(hours) % 12 || 12;
-  return `${normalizedHours}:${minutes} ${amPm}`;
+  const time24 = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
+  if (time24.test(time)) {
+    const [hours, minutes] = time.split(":");
+    const h = parseInt(hours, 10);
+    const amPm = h >= 12 ? "PM" : "AM";
+    const normalizedHours = h % 12 || 12;
+    return `${normalizedHours}:${minutes} ${amPm}`;
+  }
+
+  const time12 = /^(1[0-2]|0?[1-9]):([0-5][0-9])\s?(AM|PM|am|pm)$/i;
+  const match = time.match(time12);
+  if (match) {
+    const hours = parseInt(match[1], 10);
+    const minutes = match[2];
+    const amPm = match[3].toUpperCase();
+    return `${hours}:${minutes} ${amPm}`;
+  }
+
+  return time;
 }

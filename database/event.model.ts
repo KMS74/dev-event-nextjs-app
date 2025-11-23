@@ -1,5 +1,10 @@
 import { Schema, model, models, Document } from "mongoose";
-import { generateSlug, formatToISODate, normalizeTime } from "@/lib/utils";
+import {
+  generateSlug,
+  formatToISODate,
+  normalizeTime,
+  isValidTime,
+} from "@/lib/utils";
 
 /**
  * TypeScript interface for Event document
@@ -137,8 +142,13 @@ EventSchema.pre("save", async function () {
     this.date = formatToISODate(this.date);
   }
 
-  // Normalize time format (HH:MM)
+  // Normalize time format (h:MM AM/PM)
   if (this.isModified("time")) {
+    if (!isValidTime(this.time)) {
+      throw new Error(
+        "Invalid time format. Please use HH:MM (24-hour) or h:MM AM/PM (12-hour)."
+      );
+    }
     this.time = normalizeTime(this.time);
   }
 });
