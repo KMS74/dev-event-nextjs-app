@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 
 /**
  * Generates a unique URL-friendly slug from a given string
- * Appends a random 6-character alphanumeric string to ensure uniqueness
+ * Appends a random 8-character hexadecimal string to ensure uniqueness
  * @param text - The text to convert to a slug
  * @returns A unique URL-friendly slug string
  *
