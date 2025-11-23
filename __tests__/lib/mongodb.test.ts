@@ -14,6 +14,10 @@ describe("connectToDatabase", () => {
     (global as any).mongoose = { conn: null, promise: null };
   });
 
+  afterEach(() => {
+    delete process.env.MONGODB_URI;
+  });
+
   it("should create new connection when cache is empty", async () => {
     process.env.MONGODB_URI = "mongodb://localhost:27017/test";
     const mockConnection = { readyState: 1 };
