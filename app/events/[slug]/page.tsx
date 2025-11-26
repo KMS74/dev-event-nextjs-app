@@ -5,6 +5,7 @@ import { IEvent } from "@/database/event.model";
 import EventDetailItem from "@/components/EventDetailItem";
 import EventAgenda from "@/components/EventAgenda";
 import EventTags from "@/components/EventTags";
+import BookEvent from "@/components/BookEvent";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -39,6 +40,8 @@ const EventDetailsPage = async ({ params }: Props) => {
     organizer,
     mode,
   } = event;
+
+  const bookings = 10;
 
   return (
     <section id="event">
@@ -91,7 +94,17 @@ const EventDetailsPage = async ({ params }: Props) => {
         </div>
 
         <aside className="booking">
-          <p className="text-lg font-semibold">Book Event</p>
+          <div className="signup-card">
+            <h2>Book Your Spot</h2>
+            {bookings > 0 ? (
+              <p className="text-sm">
+                Join {bookings} people who have already booked their spot!
+              </p>
+            ) : (
+              <p className="text-sm">Be the first to book your spot!</p>
+            )}
+            <BookEvent />
+          </div>
         </aside>
       </div>
     </section>
