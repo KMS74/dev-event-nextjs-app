@@ -44,6 +44,7 @@ const EventDetailsPage = async ({ params }: Props) => {
     <section id="event">
       <div className="header">
         <h1>{title}</h1>
+        <p>{description}</p>
       </div>
 
       <div className="details">
@@ -55,11 +56,6 @@ const EventDetailsPage = async ({ params }: Props) => {
             height={800}
             className="banner"
           />
-
-          <section className="flex-col-gap-2">
-            <h2>Description</h2>
-            <p>{description}</p>
-          </section>
 
           <section className="flex-col-gap-2">
             <h2>Overview</h2>
