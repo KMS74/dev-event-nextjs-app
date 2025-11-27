@@ -1,6 +1,6 @@
 import React from "react";
 
-const EventDetailsSkelton = () => {
+const EventDetailsSkeleton = () => {
   return (
     <section id="event">
       {/* Event Details */}
@@ -24,4 +24,4 @@ const EventDetailsSkelton = () => {
   );
 };
 
-export default EventDetailsSkelton;
+export default EventDetailsSkeleton;

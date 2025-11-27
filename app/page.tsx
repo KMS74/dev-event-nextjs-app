@@ -1,4 +1,4 @@
-import EventsSkelton from "@/components/EventsSkelton";
+import EventsSkelton from "@/components/EventsSkeleton";
 import ExploreBtn from "@/components/ExploreBtn";
 import FeaturedEvents from "@/components/FeaturedEvents";
 import { Suspense } from "react";

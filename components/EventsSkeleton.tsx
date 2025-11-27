@@ -1,4 +1,4 @@
-const EventsSkelton = ({ count = 3 }: { count?: number }) => {
+const EventsSkeleton = ({ count = 3 }: { count?: number }) => {
   return (
     <section className="mt-20">
       <div className="h-8 bg-gray-900 rounded-lg shadow-md p-4 animate-pulse w-1/4 mb-3"></div>
@@ -27,4 +27,4 @@ const EventsSkelton = ({ count = 3 }: { count?: number }) => {
   );
 };
 
-export default EventsSkelton;
+export default EventsSkeleton;

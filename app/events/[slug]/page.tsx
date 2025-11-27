@@ -1,6 +1,6 @@
 import EventDetails from "@/components/EventDetails";
-import EventDetailsSkelton from "@/components/EventDetailsSkelton";
-import EventsSkelton from "@/components/EventsSkelton";
+import EventDetailsSkeleton from "@/components/EventDetailsSkeleton";
+import EventsSkeleton from "@/components/EventsSkeleton";
 import SimilarEvents from "@/components/SimilarEvents";
 import { Suspense } from "react";
 
@@ -11,11 +11,11 @@ type Props = {
 const EventDetailsPage = ({ params }: Props) => {
   return (
     <section id="event">
-      <Suspense fallback={<EventDetailsSkelton />}>
+      <Suspense fallback={<EventDetailsSkeleton />}>
         <EventDetails params={params} />
       </Suspense>
 
-      <Suspense fallback={<EventsSkelton />}>
+      <Suspense fallback={<EventsSkeleton />}>
         <SimilarEvents params={params} />
       </Suspense>
     </section>
