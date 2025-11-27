@@ -7,9 +7,18 @@ import { BASE_URL } from "@/lib/config";
 const HomePage = async () => {
   "use cache";
   cacheLife("hours");
-  const res = await fetch(`${BASE_URL}/api/events`);
-  const { events } = (await res.json()) as { events: IEvent[] };
-
+  let events: IEvent[] = [];
+  try {
+    const res = await fetch(`${BASE_URL}/api/events`);
+    if (!res.ok) {
+      console.error(`Failed to fetch events: ${res.status} ${res.statusText}`);
+    } else {
+      const data = await res.json();
+      events = data.events || [];
+    }
+  } catch (error) {
+    console.error("Error fetching events:", error);
+  }
   return (
     <section>
       <h1 className="text-center">
