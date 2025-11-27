@@ -5,7 +5,7 @@ import {
   type BookingState,
 } from "@/lib/actions/booking.actions";
 import posthog from "posthog-js";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 
 type Props = {
   eventId: string;
@@ -23,14 +23,16 @@ const BookEvent = ({ eventId, slug }: Props) => {
     initialState
   );
 
-  if (state.success) {
-    posthog.capture("event_booked", {
-      eventId,
-      slug,
-    });
-  } else {
-    posthog.captureException(state.error);
-  }
+  useEffect(() => {
+    if (state.success) {
+      posthog.capture("event_booked", {
+        eventId,
+        slug,
+      });
+    } else if (state.error) {
+      posthog.captureException(state.error);
+    }
+  }, [state.success, state.error, eventId, slug]);
 
   return (
     <div id="book-event">
