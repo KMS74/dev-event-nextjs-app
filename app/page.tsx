@@ -1,24 +1,9 @@
 import EventCard from "@/components/EventCard";
 import ExploreBtn from "@/components/ExploreBtn";
-import { IEvent } from "@/database";
-import { BASE_URL } from "@/lib/config";
+import { getEvents } from "@/lib/actions/event.actions";
 
 const HomePage = async () => {
-  let events: IEvent[] = [];
-
-  try {
-    const response = await fetch(`${BASE_URL}/api/events`);
-    if (!response.ok) {
-      throw new Error(
-        `HTTP error! status: ${response.status} ${response.statusText}`
-      );
-    }
-    const data = await response.json();
-    events = Array.isArray(data?.events) ? data.events : [];
-  } catch (error) {
-    console.error("Failed to fetch events:", error);
-    events = [];
-  }
+  const events = await getEvents();
 
   return (
     <section>
@@ -36,7 +21,14 @@ const HomePage = async () => {
             events.length > 0 &&
             events.map((event) => (
               <li key={event.slug}>
-                <EventCard {...event} />
+                <EventCard
+                  title={event.title}
+                  image={event.image}
+                  slug={event.slug}
+                  date={event.date}
+                  time={event.time}
+                  location={event.location}
+                />
               </li>
             ))}
         </ul>

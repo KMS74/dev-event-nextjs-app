@@ -6,6 +6,8 @@ import EventDetailItem from "@/components/EventDetailItem";
 import EventAgenda from "@/components/EventAgenda";
 import EventTags from "@/components/EventTags";
 import BookEvent from "@/components/BookEvent";
+import EventCard from "@/components/EventCard";
+import { getSimilarEventsBySlug } from "@/lib/actions/event.actions";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -42,6 +44,8 @@ const EventDetailsPage = async ({ params }: Props) => {
   } = event;
 
   const bookings = 10;
+
+  const similarEvents = await getSimilarEventsBySlug(slug);
 
   return (
     <section id="event">
@@ -83,14 +87,14 @@ const EventDetailsPage = async ({ params }: Props) => {
             />
           </section>
 
-          <EventAgenda agendaItems={agenda?.[0] ? JSON.parse(agenda[0]) : []} />
+          <EventAgenda agendaItems={agenda} />
 
           <section className="flex-col-gap-2">
             <h2>About Organizer</h2>
             <p>{organizer}</p>
           </section>
 
-          <EventTags tags={JSON.parse(tags[0])} />
+          <EventTags tags={tags} />
         </div>
 
         <aside className="booking">
@@ -106,6 +110,27 @@ const EventDetailsPage = async ({ params }: Props) => {
             <BookEvent />
           </div>
         </aside>
+      </div>
+      <div className="flex w-full flex-col gap-4 pt-20">
+        <h2>Similar Events</h2>
+        <ul className="events">
+          {similarEvents.length > 0 ? (
+            similarEvents.map((event) => (
+              <li key={event.slug}>
+                <EventCard
+                  title={event.title}
+                  image={event.image}
+                  slug={event.slug}
+                  date={event.date}
+                  time={event.time}
+                  location={event.location}
+                />
+              </li>
+            ))
+          ) : (
+            <p>No similar events found.</p>
+          )}
+        </ul>
       </div>
     </section>
   );

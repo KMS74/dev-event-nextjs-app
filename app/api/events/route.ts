@@ -31,6 +31,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const tags = JSON.parse(formData.get("tags") as string);
+    const agenda = JSON.parse(formData.get("agenda") as string);
+
     // Validate file type
     const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
     if (!allowedTypes.includes(file.type)) {
@@ -89,7 +92,11 @@ export async function POST(request: NextRequest) {
 
     event.image = uploadResult.secure_url;
 
-    const createdEvent = await Event.create(event);
+    const createdEvent = await Event.create({
+      ...event,
+      tags,
+      agenda,
+    });
     return NextResponse.json(
       {
         message: "Event created successfully",
