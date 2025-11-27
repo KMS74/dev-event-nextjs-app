@@ -10,7 +10,7 @@ import {
  * TypeScript interface for Event document
  * Extends mongoose Document for proper typing
  */
-export interface IEvent extends Document {
+export interface IEventBase {
   title: string;
   slug: string;
   description: string;
@@ -28,6 +28,12 @@ export interface IEvent extends Document {
   createdAt: Date;
   updatedAt: Date;
 }
+
+/**
+ * TypeScript interface for Event document
+ * Extends mongoose Document for proper typing
+ */
+export interface IEvent extends IEventBase, Document {}
 
 /**
  * Event Schema Definition

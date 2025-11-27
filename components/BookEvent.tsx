@@ -1,39 +1,70 @@
 "use client";
 
-import { useState } from "react";
+import {
+  createBooking,
+  type BookingState,
+} from "@/lib/actions/booking.actions";
+import posthog from "posthog-js";
+import { useActionState } from "react";
 
-const BookEvent = () => {
-  const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+type Props = {
+  eventId: string;
+  slug: string;
+};
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setTimeout(() => {
-      setSubmitted(true);
-    }, 1000);
-  };
+const initialState: BookingState = {
+  success: false,
+  message: "",
+};
+
+const BookEvent = ({ eventId, slug }: Props) => {
+  const [state, formAction, isPending] = useActionState(
+    createBooking,
+    initialState
+  );
+
+  if (state.success) {
+    posthog.capture("event_booked", {
+      eventId,
+      slug,
+    });
+  } else {
+    posthog.captureException(state.error);
+  }
 
   return (
     <div id="book-event">
-      {submitted ? (
-        <p>
-          Thank you for booking the event!🎉 You will receive a confirmation
-          email 📩.
-        </p>
+      {state.success ? (
+        <div className="success-message">
+          <p>{state.message}</p>
+        </div>
       ) : (
-        <form onSubmit={handleSubmit}>
+        <form action={formAction}>
+          {/* Hidden fields for eventId and slug */}
+          <input type="hidden" name="eventId" value={eventId} />
+          <input type="hidden" name="slug" value={slug} />
+
           <div>
             <label htmlFor="email">Email Address</label>
             <input
               type="email"
               id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              name="email"
               required
               placeholder="Enter your email address"
+              disabled={isPending}
             />
           </div>
-          <button type="submit">Book Now</button>
+
+          {state.error && (
+            <div className="error-message">
+              <p className="text-red-500">{state.error}</p>
+            </div>
+          )}
+
+          <button type="submit" disabled={isPending}>
+            {isPending ? "Booking..." : "Book Now"}
+          </button>
         </form>
       )}
     </div>

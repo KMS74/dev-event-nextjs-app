@@ -2,15 +2,21 @@ import mongoose, { Schema, model, models, Document } from "mongoose";
 import Event from "./event.model";
 
 /**
- * TypeScript interface for Booking document
+ * TypeScript interface for Booking base
  * Extends mongoose Document for proper typing
  */
-export interface IBooking extends Document {
+export interface IBookingBase {
   eventId: mongoose.Types.ObjectId;
   email: string;
   createdAt: Date;
   updatedAt: Date;
 }
+
+/**
+ * TypeScript interface for Booking document
+ * Extends mongoose Document for proper typing
+ */
+export interface IBooking extends IBookingBase, Document {}
 
 /**
  * Booking Schema Definition

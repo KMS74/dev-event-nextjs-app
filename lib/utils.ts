@@ -12,7 +12,7 @@ export function cn(...inputs: ClassValue[]) {
  * @returns A unique URL-friendly slug string
  *
  * @example
-* generateSlug("Hello World!") // returns "hello-world-a1b2c3d4"
+ * generateSlug("Hello World!") // returns "hello-world-a1b2c3d4"
  * generateSlug("React & Next.js Conference 2024") // returns "react-nextjs-conference-2024-f9e8d7c6"
  */
 export function generateSlug(text: string): string {
@@ -100,3 +100,6 @@ export function normalizeTime(time: string): string {
 
   return time;
 }
+
+export const sleep = (ms: number) =>
+  new Promise((resolve) => setTimeout(resolve, ms));
