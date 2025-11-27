@@ -1,3 +1,5 @@
+"use server";
+
 import connectToDatabase from "../mongodb";
 import { Event, IEvent } from "@/database";
 
