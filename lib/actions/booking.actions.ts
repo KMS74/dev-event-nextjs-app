@@ -15,11 +15,10 @@ export const createBooking = async (
 ): Promise<BookingState> => {
   try {
     const eventId = formData.get("eventId") as string;
-    const slug = formData.get("slug") as string;
     const email = formData.get("email") as string;
 
     // Validate required fields
-    if (!eventId || !slug || !email) {
+    if (!eventId || !email) {
       return {
         success: false,
         message: "Missing required fields",
@@ -38,7 +37,7 @@ export const createBooking = async (
     }
 
     await connectToDatabase();
-    await Booking.create({ eventId, slug, email });
+    await Booking.create({ eventId, email });
 
     return {
       success: true,
