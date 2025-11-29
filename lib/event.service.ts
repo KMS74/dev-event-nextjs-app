@@ -47,13 +47,18 @@ export const getSimilarEventsBySlug = async (slug: string) => {
     await connectToDatabase();
 
     const event = await Event.findOne({ slug });
+
+    if (!event) {
+      return [];
+    }
+
     const similarEvents = (await Event.find({
       $and: [
         {
-          _id: { $ne: event?._id },
+          _id: { $ne: event._id },
         },
         {
-          tags: { $in: event?.tags },
+          tags: { $in: event.tags },
         },
       ],
     })
