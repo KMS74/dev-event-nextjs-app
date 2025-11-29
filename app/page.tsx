@@ -1,7 +1,7 @@
-import EventsSkelton from "@/components/EventsSkeleton";
+import { Suspense } from "react";
+import EventsSkeleton from "@/components/EventsSkeleton";
 import ExploreBtn from "@/components/ExploreBtn";
 import FeaturedEvents from "@/components/FeaturedEvents";
-import { Suspense } from "react";
 
 const HomePage = async () => {
   return (
@@ -15,7 +15,7 @@ const HomePage = async () => {
 
       <ExploreBtn />
 
-      <Suspense fallback={<EventsSkelton />}>
+      <Suspense fallback={<EventsSkeleton />}>
         <FeaturedEvents />
       </Suspense>
     </section>

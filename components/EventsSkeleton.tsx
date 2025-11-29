@@ -1,25 +1,35 @@
 const EventsSkeleton = ({ count = 3 }: { count?: number }) => {
   return (
-    <section className="mt-20">
-      <div className="h-8 bg-gray-900 rounded-lg shadow-md p-4 animate-pulse w-1/4 mb-3"></div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <section className="mt-20 animate-pulse space-y-7">
+      {/* Section Title */}
+      <div className="h-8 bg-white/5 rounded-md w-1/4"></div>
+
+      <div className="events">
         {[...Array(count)].map((_, index) => (
-          <div
-            key={index}
-            className="rounded-lg shadow-md p-4 animate-pulse bg-gray-900"
-          >
-            {/* Image placeholder */}
-            <div className="h-48 bg-gray-800 rounded-md mb-4"></div>
+          <div key={index} className="flex flex-col gap-3">
+            {/* Poster */}
+            <div className="h-[300px] w-full bg-white/5 rounded-lg"></div>
 
-            {/* Title placeholder */}
-            <div className="h-6 bg-gray-800 rounded w-3/4 mb-2"></div>
+            {/* Location */}
+            <div className="flex flex-row gap-2 items-center">
+              <div className="w-[14px] h-[14px] bg-white/5 rounded-full"></div>
+              <div className="h-4 bg-white/5 rounded-md w-1/3"></div>
+            </div>
 
-            {/* Date/Location placeholder */}
-            <div className="h-4 bg-gray-800 rounded w-1/2 mb-2"></div>
+            {/* Title */}
+            <div className="h-7 bg-white/5 rounded-md w-3/4"></div>
 
-            {/* Description placeholder */}
-            <div className="h-4 bg-gray-800 rounded w-full"></div>
-            <div className="h-4 bg-gray-800 rounded w-5/6 mt-2"></div>
+            {/* Datetime */}
+            <div className="flex flex-row flex-wrap items-center gap-4">
+              <div className="flex flex-row gap-2 items-center">
+                <div className="w-[14px] h-[14px] bg-white/5 rounded-full"></div>
+                <div className="h-4 bg-white/5 rounded-md w-20"></div>
+              </div>
+              <div className="flex flex-row gap-2 items-center">
+                <div className="w-[14px] h-[14px] bg-white/5 rounded-full"></div>
+                <div className="h-4 bg-white/5 rounded-md w-16"></div>
+              </div>
+            </div>
           </div>
         ))}
       </div>

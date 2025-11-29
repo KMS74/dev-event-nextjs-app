@@ -1,7 +1,12 @@
+import { cacheLife, cacheTag } from "next/cache";
 import EventCard from "./EventCard";
-import { getEvents } from "@/lib/actions/event.actions";
+import { getEvents } from "@/lib/event.service";
 
 const FeaturedEvents = async () => {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("featured-events");
+
   const events = await getEvents();
 
   return (

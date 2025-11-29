@@ -1,7 +1,4 @@
-"use server";
-
-import { cacheLife, cacheTag } from "next/cache";
-import connectToDatabase from "../mongodb";
+import connectToDatabase from "./mongodb";
 import { Event, IEvent, IEventBase } from "@/database";
 
 /**
@@ -24,14 +21,6 @@ const serializeEvent = (event: IEvent): SerializedEvent => {
 };
 
 export const getEvents = async () => {
-  "use cache";
-  // This cache can be revalidated by webhook or server action
-  // when you call revalidateTag("events")
-  cacheTag("events");
-  // This cache will revalidate after an hour even if no explicit
-  // revalidate instruction was received
-  cacheLife("hours");
-
   try {
     await connectToDatabase();
     const events = (await Event.find().lean().sort({ date: -1 })) as IEvent[];
@@ -43,13 +32,6 @@ export const getEvents = async () => {
 };
 
 export const getEventBySlug = async (slug: string) => {
-  "use cache";
-  // This cache can be revalidated by webhook or server action
-  // when you call revalidateTag("events")
-  cacheTag(`events-${slug}`);
-  // This cache will revalidate after an hour even if no explicit
-  // revalidate instruction was received
-  cacheLife("hours");
   try {
     await connectToDatabase();
     const event = (await Event.findOne({ slug }).lean()) as IEvent | null;
@@ -61,13 +43,6 @@ export const getEventBySlug = async (slug: string) => {
 };
 
 export const getSimilarEventsBySlug = async (slug: string) => {
-  "use cache";
-  // This cache can be revalidated by webhook or server action
-  // when you call revalidateTag("events")
-  cacheTag(`events-${slug}`);
-  // This cache will revalidate after an hour even if no explicit
-  // revalidate instruction was received
-  cacheLife("hours");
   try {
     await connectToDatabase();
 

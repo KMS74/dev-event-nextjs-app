@@ -1,11 +1,16 @@
-import { getSimilarEventsBySlug } from "@/lib/actions/event.actions";
+import { getSimilarEventsBySlug } from "@/lib/event.service";
 import EventCard from "./EventCard";
+import { cacheLife, cacheTag } from "next/cache";
 
 const SimilarEvents = async ({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) => {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("similar-events");
+
   const { slug } = await params;
 
   const similarEvents = await getSimilarEventsBySlug(slug);

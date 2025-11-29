@@ -1,16 +1,21 @@
-import { getEventBySlug } from "@/lib/actions/event.actions";
+import { getEventBySlug } from "@/lib/event.service";
 import { notFound } from "next/navigation";
 import BookEvent from "./BookEvent";
 import EventAgenda from "./EventAgenda";
 import EventDetailItem from "./EventDetailItem";
 import EventTags from "./EventTags";
 import Image from "next/image";
+import { cacheLife, cacheTag } from "next/cache";
 
 const EventDetails = async ({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) => {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("featured-events");
+
   const { slug } = await params;
 
   const event = await getEventBySlug(slug);
